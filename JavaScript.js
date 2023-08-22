@@ -42,7 +42,8 @@ function createBoard() {
 function playPosition(square) {
 
 // Player is unable to continue selecting 
-// positions on the board if the game is over.  ¯\_(ツ)_/¯ 
+// positions on the board if the game is over. 
+// ¯\_(ツ)_/¯ 
 if (gameOver == true) return -1;
 
     if (turn == PLAYER) {
@@ -127,6 +128,17 @@ function getBoardIndex(row, column) {
 }
 
 
+// The purpose of this function is to do the opposite
+// of what "getBoardIndex()" does. 
+
+// It retrives the row and column with a given index.
+function getCoordsFromIndex(index) {
+    let row = Math.floor(index / offset);
+    let column = index - row * offset;
+    return [ row, column ];
+}
+
+
 // Returns a multi-dimensional array of 
 // available positions, each array contains 
 // the row and column of each available position.
@@ -166,6 +178,7 @@ function checkForWinner() {
 
         // Checks if all the positions' values are the same and returns 1.
         if (board[a] != "-" && board[a] == board[b] && board[a] == board[c]) {
+            highlightPositions(a, b, c);
             return 1;
         }
     }
@@ -175,35 +188,20 @@ function checkForWinner() {
 }
 
 
-function highlightPositions(direction, row, column) {
-    if (direction == "horizontal") {
-        var box1 = document.getElementById(row.toString() + "-" + column.toString());
-        var box2 = document.getElementById((row).toString() + "-" + (column + 1).toString());
-        var box3 = document.getElementById((row).toString() + "-" + (column + 2).toString());
+// This function's purpose is to customize the colors of the winning squares.
+// In case the player wins, the pattern turns green. Otherwise it shows the pattern
+// as red because you were defeated by the computer.
+function highlightPositions(a, b, c) {
+    var box1 = document.getElementById(getCoordsFromIndex(a)[0].toString() + "-" + getCoordsFromIndex(a)[1].toString());
+    var box2 = document.getElementById(getCoordsFromIndex(b)[0].toString() + "-" + getCoordsFromIndex(b)[1].toString());
+    var box3 = document.getElementById(getCoordsFromIndex(c)[0].toString() + "-" + getCoordsFromIndex(c)[1].toString());
 
-    }
-    else if (direction == "vertical") {
-        var box1 = document.getElementById(row.toString() + "-" + column.toString());
-        var box2 = document.getElementById((row + 1).toString() + "-" + column.toString());
-        var box3 = document.getElementById((row + 2).toString() + "-" + column.toString());
-    }
-    else if (direction == "diagonal1") {
-        var box1 = document.getElementById(row.toString() + "-" + column.toString());
-        var box2 = document.getElementById((row + 1).toString() + "-" + (column + 1).toString());
-        var box3 = document.getElementById((row + 2).toString() + "-" + (column + 2).toString());
-    }
-    else {
-        var box1 = document.getElementById(row.toString() + "-" + column.toString());
-        var box2 = document.getElementById((row - 1).toString() + "-" + (column + 1).toString());
-        var box3 = document.getElementById((row - 2).toString() + "-" + (column + 2).toString());
-    }
+    box1.style.color = (turn == PLAYER) ? "lightgreen" : "lightcoral";
+    box2.style.color = box1.style.color;
+    box3.style.color = box1.style.color;
 
-    box1.style.color = "lightgreen";
-    box2.style.color = "lightgreen";
-    box3.style.color = "lightgreen";
-
-    box1.style.backgroundColor = "rgba(141, 255, 194, 0.358)";
-    box2.style.backgroundColor = "rgba(141, 255, 194, 0.358)";
-    box3.style.backgroundColor = "rgba(141, 255, 194, 0.358)";
+    box1.style.backgroundColor = (turn == PLAYER) ? "rgba(141, 255, 194, 0.358)" : "rgba(255, 141, 141, 0.358)";
+    box2.style.backgroundColor = box1.style.backgroundColor;
+    box3.style.backgroundColor = box1.style.backgroundColor;
 }
 
