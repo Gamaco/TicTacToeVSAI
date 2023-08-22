@@ -47,19 +47,26 @@ function playPosition(square) {
 if (gameOver == true) return -1;
 
     if (turn == PLAYER) {
-        let coords = square.id.split("-");
+
+        // Extract the selected row and column from the element ID.
+        let coords = square.id.split("-"); 
         let row = parseInt(coords[0]);
         let column = parseInt(coords[1]);
 
+        // Convert the given row and column,
+        // to a position within the table array.
         let index = getBoardIndex(row, column);
         let selection = board[index];
 
+        // Checks if the selected position is empty
+        // before placing the X.
         if (selection.toString() == "-") {
 
             square.innerText = "X";
             board[index] = "X";
 
         }
+        // Let's the player know that the selected position is not empty.
         else {
             alert("Select another position to play. This position is not available.");
         }
