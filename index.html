@@ -4,23 +4,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
     <link rel="stylesheet" href="styles.css">
     <script src="./JavaScript.js"></script>
-    <title>TicTacToe vs Bot</title>
+    <title>TicTacToe vs AI</title>
 </head>
 
 <body>
+    <!-- Javascript needed for bootstrap styling-->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+        crossorigin="anonymous"></script>
+
     <div class="dark-background">
-        <dev class="board">
-            <div id="0-0" class="square" onclick="playPosition(this)"></div>
-            <div id="0-1" class="square middle-top" onclick="playPosition(this)"></div>
-            <div id="0-2" class="square" onclick="playPosition(this)"></div>
-            <div id="1-0" class="square middle-left" onclick="playPosition(this)"></div>
-            <div id="1-1" class="square middle" onclick="playPosition(this)"></div>
-            <div id="1-2" class="square middle-right" onclick="playPosition(this)"></div>
-            <div id="2-0" class="square" onclick="playPosition(this)"></div>
-            <div id="2-1" class="square middle-bottom" onclick="playPosition(this)"></div>
-            <div id="2-2" class="square" onclick="playPosition(this)"></div>
+        <div class="left-content">
+            <div class="middle">
+                <div class="mb-5"></div>
+                <div class="container-xl">
+                    <h6>You vs Bot (AI)</h6>
+                    <p class="instructions">FYI: The computer selects a random position. There's no big maths behind scenes.</p>
+                </div>
+                <div class="mb-3"></div>
+                <div class="container-sm">
+                    <button id="startGame" type="button" class="btn btn-success" onclick="startGame(this)">Start</button>
+                </div>
+                <div class="mb-3"></div>
+                <div class="container-sm">
+                <button id="resetGame" type="button" class="btn btn-danger" onclick="resetGame()">Reset</button>
+                </div>
+                <div class="mb-5"></div>
+                <div class="container-sm">
+                    <div class="alert" role="alert">
+                      </div>
+                </div>
+            </div>
+        </div>
+        <div class="middle-content">
+            <div class="board">
+                <div id="0-0" class="square" onclick="playPosition(this)"></div>
+                <div id="0-1" class="square middle-top" onclick="playPosition(this)"></div>
+                <div id="0-2" class="square" onclick="playPosition(this)"></div>
+                <div id="1-0" class="square middle-left" onclick="playPosition(this)"></div>
+                <div id="1-1" class="square middle" onclick="playPosition(this)"></div>
+                <div id="1-2" class="square middle-right" onclick="playPosition(this)"></div>
+                <div id="2-0" class="square" onclick="playPosition(this)"></div>
+                <div id="2-1" class="square middle-bottom" onclick="playPosition(this)"></div>
+                <div id="2-2" class="square" onclick="playPosition(this)"></div>
+            </div>
+        </div>
+        <div class="right-content">
         </div>
     </div>
 </body>

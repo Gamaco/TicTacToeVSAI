@@ -1,4 +1,6 @@
 
+// Event that gets called once 
+// the page loads for the first time.
 window.onload = () => {
     createBoard();
 }
@@ -13,7 +15,7 @@ var columns = 3;
 var offset = 3; //Amount of rows represented in the array.
 
 var board = [];
-var gameOver = false;
+var gameOver = true;
 var turn = Math.floor(Math.random());
 
 
@@ -21,19 +23,44 @@ var turn = Math.floor(Math.random());
 // The purpose of this function is to initialize the table 
 // array with a character to indicate that the positions are
 // empty.
-
-// Since the first turn to play the game is randomly selected, 
-// we also check if the current turn is the bot to make a move.
 function createBoard() {
     for (let row = 0; row < rows; row++) {
         for (let column = 0; column < columns; column++) {
             board.push("-");
         }
     }
+}
+
+
+// Since the first turn to play the game is randomly selected, 
+// we check if the current turn is the bot to make a move. Also
+// disables the start button and sets the gameOver state to false.
+function startGame(button) {
+    button.disabled = true;
+    gameOver = false;
 
     if (turn == BOT) {
         playPosition();
     }
+
+    showCustomMessage("green", "Game started!");
+}
+
+
+// Resetting the game: clears the html elements, clears the array table,
+// sets the array positions to empty again, re-enables the start button,
+// and changes the game over state to true.
+function resetGame() {
+
+    let startBtn = document.getElementById("startGame");
+
+    clearTableGui();
+
+    board = [];
+    createBoard();
+
+    gameOver = true;
+    startBtn.disabled = false;
 }
 
 
@@ -41,15 +68,15 @@ function createBoard() {
 // It handles both player and bot moves on the board.
 function playPosition(square) {
 
-// Player is unable to continue selecting 
-// positions on the board if the game is over. 
-// ¯\_(ツ)_/¯ 
-if (gameOver == true) return -1;
+    // Player is unable to continue selecting 
+    // positions on the board if the game is over. 
+    // ¯\_(ツ)_/¯ 
+    if (gameOver == true) return -1;
 
     if (turn == PLAYER) {
 
         // Extract the selected row and column from the element ID.
-        let coords = square.id.split("-"); 
+        let coords = square.id.split("-");
         let row = parseInt(coords[0]);
         let column = parseInt(coords[1]);
 
@@ -68,17 +95,18 @@ if (gameOver == true) return -1;
         }
         // Let's the player know that the selected position is not empty.
         else {
-            alert("Select another position to play. This position is not available.");
+            showCustomMessage("yellow", "Select another position to play. This position is not available.");
+            return -1;
         }
     }
 
     if (turn == BOT) {
-        
+
         let positions = getAvailablePos(); // Multi-array of positions available. E.g [row, column].
 
         // In case the array is empty, it'll show a message. 
         if (positions == -1) {
-            alert("There's no more playable positions. Game over.");
+            showCustomMessage("red", "There's no more playable positions. Game over.");
             gameOver = true;
         }
         else {
@@ -121,8 +149,6 @@ function gameOverCheck() {
     }
     else {
         gameOver = true;
-        let winner = (turn == PLAYER) ? "You" : "Bot (AI)";
-        alert(winner + " Won! Game over.");
     }
 }
 
@@ -142,7 +168,7 @@ function getBoardIndex(row, column) {
 function getCoordsFromIndex(index) {
     let row = Math.floor(index / offset);
     let column = index - row * offset;
-    return [ row, column ];
+    return [row, column];
 }
 
 
@@ -186,6 +212,7 @@ function checkForWinner() {
         // Checks if all the positions' values are the same and returns 1.
         if (board[a] != "-" && board[a] == board[b] && board[a] == board[c]) {
             highlightPositions(a, b, c);
+            showWinnerScreen();
             return 1;
         }
     }
@@ -197,7 +224,7 @@ function checkForWinner() {
 
 // This function's purpose is to customize the colors of the winning squares.
 // In case the player wins, the pattern turns green. Otherwise it shows the pattern
-// as red because you were defeated by the computer.
+// as red because you were defeated by the computer. (ง ͠❛ _⦣ ͠❛ )ง
 function highlightPositions(a, b, c) {
     var box1 = document.getElementById(getCoordsFromIndex(a)[0].toString() + "-" + getCoordsFromIndex(a)[1].toString());
     var box2 = document.getElementById(getCoordsFromIndex(b)[0].toString() + "-" + getCoordsFromIndex(b)[1].toString());
@@ -212,3 +239,59 @@ function highlightPositions(a, b, c) {
     box3.style.backgroundColor = box1.style.backgroundColor;
 }
 
+
+// Shows a message. Text context depends on who won.
+function showWinnerScreen() {
+    if (turn == PLAYER) {
+        showCustomMessage("green", "You won!");
+    }
+    else if (turn == BOT) {
+        showCustomMessage("red", "You lost :(");
+    }
+}
+
+
+// The purpose of this function is to clear the tictactoe table GUI by
+// changing the text back to white, empty the squares and changing the background
+// back to transparent.
+function clearTableGui() {
+    let board = document.getElementsByClassName('board')[0];
+    let squares = board.children;
+
+    for (let square of squares) {
+        square.innerText = "";
+        square.style.color = "white";
+        square.style.backgroundColor = "rgba(255, 255, 255, 0)";
+    }
+}
+
+
+// This function's purpose is to show a customized message alert using
+// bootstrap's css. It also schedules a timeout event for 3 seconds that triggers -
+// another function to clear the message off the screen.
+function showCustomMessage(color, message) {
+    alert = document.getElementsByClassName("alert")[0];
+
+    if (color == "red") {
+        alert.classList.add("alert-danger");
+    }
+    if (color == "green") {
+        alert.classList.add("alert-success");
+    }
+    if (color == "yellow") {
+        alert.classList.add("alert-warning");
+    }
+
+    alert.innerText = message;
+    setTimeout(removeCustomMessage, 3000);
+}
+
+
+// Removes the message from the screen.
+function removeCustomMessage() {
+    alert = document.getElementsByClassName("alert")[0];
+    alert.classList.remove("alert-danger");
+    alert.classList.remove("alert-success");
+    alert.classList.remove("alert-warning");
+    alert.innerText = "";
+}
